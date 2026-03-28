@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Citizen Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+    <style>
+        body {
+          font-family: 'DM Sans', sans-serif;
+          background: #0b0c10;
+          color: #e8eaf0;
+          margin: 0;
+        }
+
+        header {
+          text-align: center;
+          padding: 20px;
+        }
+
+        h1 {
+          font-family: 'Bebas Neue';
+          font-size: 48px;
+        }
+
+        .container {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          gap: 20px;
+          padding: 20px;
+        }
+
+        .card {
+          background: #13151c;
+          border: 1px solid #1f2230;
+          border-radius: 16px;
+          padding: 20px;
+        }
+
+        input, textarea {
+          width: 100%;
+          padding: 10px;
+          margin-top: 10px;
+          background: #0d0f16;
+          border: 1px solid #1f2230;
+          color: white;
+          border-radius: 8px;
+        }
+
+        button {
+          margin-top: 12px;
+          padding: 12px;
+          width: 100%;
+          border: none;
+          border-radius: 8px;
+          background: #3b82f6;
+          color: white;
+          cursor: pointer;
+        }
+
+        .complaint {
+          border-bottom: 1px solid #1f2230;
+          padding: 12px 0;
+        }
+
+        .status {
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 12px;
+        }
+
+        .pending { background: #f59e0b; }
+        .approved { background: #10b981; }
+        .rejected { background: #ef4444; }
+
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Citizen Dashboard 👤</h1>
+</header>
+
+<div class="container">
+
+    <!-- PROFILE -->
+    <div class="card">
+        <h3>Your Profile</h3>
+        <p>Email: citizen@gmail.com</p>
+        <p>Status: Active</p>
+    </div>
+
+    <!-- FILE COMPLAINT -->
+    <div class="card">
+        <h3>File Complaint</h3>
+
+        <input type="text" id="title" placeholder="Complaint Title"/>
+        <textarea id="description" placeholder="Describe the issue"></textarea>
+        <input type="text" id="location" placeholder="Location"/>
+
+        <button onclick="submitComplaint()">Submit Complaint</button>
+    </div>
+
+</div>
+
+<!-- COMPLAINT LIST -->
+<div class="card" style="margin:20px;">
+    <h3>Your Complaints</h3>
+    <div id="complaints"></div>
+</div>
+
+<script>
+
+    const email = "citizen@gmail.com"; // later make dynamic
+
+    async function submitComplaint() {
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+      const location = document.getElementById("location").value;
+
+      await fetch("http://localhost:8081/api/complaints", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          title,
+          description,
+          location,
+          email
+        })
+      });
+
+      alert("Complaint submitted ✅");
+      loadComplaints();
+    }
+
+    async function loadComplaints() {
+      const res = await fetch(`http://localhost:8081/api/complaints?email=${email}`);
+      const data = await res.json();
+
+      const container = document.getElementById("complaints");
+      container.innerHTML = "";
+
+      data.forEach(c => {
+
+        let statusClass = c.status.toLowerCase();
+
+        container.innerHTML += `
+          <div class="complaint">
+            <b>${c.title}</b><br/>
+            ${c.description}<br/>
+            📍 ${c.location}<br/>
+            <span class="status ${statusClass}">${c.status}</span><br/>
+            🕒 ${c.date_filed || ''}
+          </div>
+        `;
+      });
+    }
+
+    loadComplaints();
+
+</script>
+
+</body>
+</html>

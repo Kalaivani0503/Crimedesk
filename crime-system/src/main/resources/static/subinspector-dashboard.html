@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sub Inspector Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #111;
+            color: white;
+            padding: 20px;
+        }
+
+        .card {
+            background: #1c1c1c;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        select, button {
+            margin-top: 10px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        button {
+            background: green;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Sub Inspector Dashboard 🔍</h1>
+
+<div id="complaints"></div>
+
+<script>
+
+    // ⚠️ CHANGE THIS BASED ON LOGIN LATER
+    const officerId = 2;
+
+    async function loadComplaints() {
+
+        const res = await fetch(`http://localhost:8081/api/complaints/assigned?officerId=${officerId}`);
+        const data = await res.json();
+
+        const container = document.getElementById("complaints");
+        container.innerHTML = "";
+
+        data.forEach(c => {
+
+            container.innerHTML += `
+                <div class="card">
+                    <h3>${c.title}</h3>
+                    <p>${c.description}</p>
+                    <p>📍 ${c.location}</p>
+                    <p>Status: ${c.status}</p>
+
+                    <select id="status-${c.complaintId}">
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+
+                    <button onclick="updateStatus(${c.complaintId})">
+                        Update Status
+                    </button>
+                </div>
+            `;
+        });
+    }
+
+    async function updateStatus(complaintId) {
+
+        const status = document.getElementById("status-" + complaintId).value;
+
+        await fetch(`http://localhost:8081/api/complaints/update?complaintId=${complaintId}&status=${status}`, {
+            method: "POST"
+        });
+
+        alert("Status Updated ✅");
+        loadComplaints();
+    }
+
+    loadComplaints();
+
+</script>
+
+</body>
+</html>
