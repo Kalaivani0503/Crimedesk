@@ -7,7 +7,7 @@ A Crime Investigation & Case Tracking System.
 A role-based web application designed to manage and track crime cases from reporting to final verdict.  
 The system connects citizens, police departments, and the court to ensure a complete case lifecycle.
 
----
+
 
 ## Features
 
@@ -37,7 +37,7 @@ The system connects citizens, police departments, and the court to ensure a comp
 - Monitor all cases
 - System-level control
 
----
+
 
 ## Tech Stack
 
@@ -46,7 +46,7 @@ The system connects citizens, police departments, and the court to ensure a comp
 - Database: MySQL
 - Build Tool: Maven
 
----
+
 
 ## Project Structure
 
@@ -64,7 +64,7 @@ The system connects citizens, police departments, and the court to ensure a comp
 
 - pom.xml
 
----
+
 
 ## Case Status Flow
 
@@ -75,7 +75,7 @@ The system connects citizens, police departments, and the court to ensure a comp
 - UNDER_TRIAL  
 - CLOSED (Verdict Given)
 
----
+
 
 ## Future Enhancements
 
@@ -85,13 +85,13 @@ The system connects citizens, police departments, and the court to ensure a comp
 - UI improvements
 - Cloud deployment (Render / Railway)
 
----
+
 
 ## Project Objective
 
 To build a structured and transparent system that connects citizens, police, and judicial authorities, ensuring efficient case tracking from complaint to final verdict.
 
----
+
 
 ## Author
 
@@ -99,6 +99,6 @@ Kalaivani V
 M.Tech Integrated Software Engineering  
 VIT Chennai  
 
----
+
 
 If you find this project useful, consider giving it a star.
